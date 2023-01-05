@@ -8,12 +8,16 @@
   <body>
     <h1 id="title">One Dollar BlackJack Challenge</h1>
     <button id="start-button" onclick="startGame()">Start Game</button><br />
-    <h3>Dealer:</h3>
-    <img id="dealer-first" />
-    <img id="dealer-second" /><br />
-    <h3>Player:</h3>
-    <img id="player-first" />
-    <img id="player-second" />
+    <div class="dealer">
+      <h3 id="dealer-score">Dealer:</h3>
+      <img id="dealer-first" />
+      <img id="dealer-second" /><br />
+    </div>
+    <div class="player">
+      <h3 id="player-score">Player:</h3>
+      <img id="player-first" />
+      <img id="player-second" />
+    </div>
     <script src="index.js"></script>
   </body>
 </html>
