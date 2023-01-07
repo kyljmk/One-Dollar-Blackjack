@@ -4,17 +4,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>One Dollar BlackJack</title>
+    <link rel="stylesheet" href="index.css">
   </head>
   <body>
     <h1 id="title">One Dollar BlackJack Challenge</h1>
     <button id="start-button" onclick="startGame()">Start Game</button><br />
     <div class="dealer">
-      <h3 id="dealer-score">Dealer:</h3>
+      <span id="dealer">Dealer:</span>
+      <span id="dealer-score"></span><br />
       <img id="dealer-first" />
       <img id="dealer-second" /><br />
     </div>
     <div class="player">
-      <h3 id="player-score">Player:</h3>
+      <span id="player">Player:</span>
+      <span id="player-score"></span><br />
       <img id="player-first" />
       <img id="player-second" />
     </div>
