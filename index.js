@@ -52,4 +52,7 @@ const twist = async () => {
   console.table(data.cards[0]);
   playerScore.textContent =
     Number(playerScore.textContent) + cardConverter(data.cards[0].value);
+  const newImage = document.createElement("img");
+  newImage.src = data.cards[0].images.png;
+  document.getElementById("player-container").appendChild(newImage);
 };
