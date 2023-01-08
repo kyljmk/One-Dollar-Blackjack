@@ -1,4 +1,5 @@
 let currentDeckId;
+let dealersHeldCard;
 let dealerFirst = document.getElementById("dealer-first");
 let dealerSecond = document.getElementById("dealer-second");
 let playerFirst = document.getElementById("player-first");
@@ -24,6 +25,7 @@ const intialDeal = async () => {
   const data = await res.json();
   console.log(data);
   dealerFirst.src = data.cards[0].images.png;
+  dealersHeldCard = data.cards[1];
   playerFirst.src = data.cards[2].images.png;
   playerSecond.src = data.cards[3].images.png;
   dealerScore.textContent = cardConverter(data.cards[0].value);
@@ -38,4 +40,16 @@ const startGame = async () => {
   const data = await res.json();
   currentDeckId = data.deck_id;
   await intialDeal();
+};
+
+let playerCardCount = 2;
+
+const twist = async () => {
+  const res = await fetch(
+    `https://www.deckofcardsapi.com/api/deck/${currentDeckId}/draw/?count=1`
+  );
+  const data = await res.json();
+  console.table(data.cards[0]);
+  playerScore.textContent =
+    Number(playerScore.textContent) + cardConverter(data.cards[0].value);
 };

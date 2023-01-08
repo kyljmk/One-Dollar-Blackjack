@@ -1,3 +1,4 @@
-.dealer {
-    border: 1px solid black;
+.dealer-first, .dealer-second,
+.player-first, .player-second {
+    height: 150px;
 }
