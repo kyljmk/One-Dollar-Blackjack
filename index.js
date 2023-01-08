@@ -4,8 +4,13 @@ let dealerFirst = document.getElementById("dealer-first");
 let dealerSecond = document.getElementById("dealer-second");
 let playerFirst = document.getElementById("player-first");
 let playerSecond = document.getElementById("player-second");
-let dealerScore = document.getElementById("dealer-score");
-let playerScore = document.getElementById("player-score");
+let dealerScoreEl = document.getElementById("dealer-score");
+let playerScoreEl = document.getElementById("player-score");
+let dealerScore;
+let playerScore;
+let balance = 1;
+let balanceEl = document.getElementById("balance");
+balanceEl.textContent = balance;
 
 const cardConverter = (card) => {
   if (card === "QUEEN" || card === "JACK" || card === "KING") {
@@ -28,9 +33,11 @@ const intialDeal = async () => {
   dealersHeldCard = data.cards[1];
   playerFirst.src = data.cards[2].images.png;
   playerSecond.src = data.cards[3].images.png;
-  dealerScore.textContent = cardConverter(data.cards[0].value);
-  playerScore.textContent =
+  dealerScore = cardConverter(data.cards[0].value);
+  dealerScoreEl.textContent = dealerScore;
+  playerScore =
     cardConverter(data.cards[2].value) + cardConverter(data.cards[3].value);
+  playerScoreEl.textContent = playerScore;
 };
 
 const startGame = async () => {
@@ -50,9 +57,19 @@ const twist = async () => {
   );
   const data = await res.json();
   console.table(data.cards[0]);
-  playerScore.textContent =
-    Number(playerScore.textContent) + cardConverter(data.cards[0].value);
   const newImage = document.createElement("img");
   newImage.src = data.cards[0].images.png;
   document.getElementById("player-container").appendChild(newImage);
+  playerScoreEl.textContent = playerScore + cardConverter(data.cards[0].value);
+  balance = 4;
 };
+
+const stick = async () => {
+  dealerSecond.src = dealersHeldCard.images.png;
+  dealerScoreEl.textContent =
+    dealerScore + cardConverter(dealersHeldCard.value);
+};
+
+const playerLoss = async () => {};
+
+const endHand = async (playerScore, dealerScore) => {};
