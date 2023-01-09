@@ -63,15 +63,37 @@ const twist = async () => {
   playerScore += cardConverter(data.cards[0].value);
   playerScoreEl.textContent = playerScore;
   playerScore > 21 && playerLoss();
-  playerScore == 21 && (stick(), 1000);
+  playerScore == 21 && stick();
 };
 
-const stick = async () => {
+const stick = () => {
   setTimeout(() => {
     dealerSecond.src = dealersHeldCard.images.png;
-    dealerScoreEl.textContent =
-      dealerScore + cardConverter(dealersHeldCard.value);
-  }, 2000);
+    dealerScore += cardConverter(dealersHeldCard.value);
+    dealerScoreEl.textContent = dealerScore;
+    dealerDraws();
+  }, 1000);
+
+  dealerScore > 21 && playerWin();
+};
+
+const dealerDraws = () => {
+  setTimeout(async () => {
+    const res = await fetch(
+      `https://www.deckofcardsapi.com/api/deck/${currentDeckId}/draw/?count=1`
+    );
+    const data = await res.json();
+    const newImage = document.createElement("img");
+    newImage.src = data.cards[0].images.png;
+    document.getElementById("dealer-container").appendChild(newImage);
+    dealerScore += cardConverter(data.cards[0].value);
+    dealerScoreEl.textContent = dealerScore;
+  }, 1000);
+  () => {
+    if (dealerScore < 16) {
+      dealerDraws();
+    }
+  };
 };
 
 const playerLoss = async () => {
