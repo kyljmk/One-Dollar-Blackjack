@@ -24,6 +24,14 @@ const cardConverter = (card) => {
   }
 };
 
+const reset = () => {
+  playerScore = 0;
+  dealerScore = 0;
+  document.getElementById("player-container").removeChild("newImage");
+  document.getElementById("dealer-container").removeChild("newImage");
+  window.location.reload();
+};
+
 const startGame = async () => {
   const res = await fetch(
     "https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6"
@@ -66,16 +74,22 @@ const twist = async () => {
   playerScore == 21 && stick();
 };
 
+const scoreCheck = async () => {
+  if (dealerScore < playerScore || dealerScore > 21) {
+    await playerWin();
+  } else {
+    await playerLoss();
+  }
+};
+
 const stick = () => {
   setTimeout(async () => {
     dealerSecond.src = dealersHeldCard.images.png;
     dealerScore += cardConverter(dealersHeldCard.value);
     dealerScoreEl.textContent = dealerScore;
+    scoreCheck();
     if (dealerScore < 16) {
       dealerDraws();
-    }
-    if (dealerScore < playerScore) {
-      await playerWin();
     }
   }, 500);
 };
@@ -94,14 +108,27 @@ const dealerDraws = () => {
     if (dealerScore < 16) {
       dealerDraws();
     }
+    scoreCheck();
   }, 500);
 };
 
 const playerLoss = async () => {
-  testTitle.textContent = "Dealer wins";
+  setTimeout(() => {
+    testTitle.textContent = "Dealer wins";
+    balance = 0;
+    balanceEl.textContent = balance;
+    reset();
+  }, 1000);
 };
 const playerWin = async () => {
   setTimeout(() => {
     testTitle.textContent = "Player wins";
+    balance *= 2;
+    balanceEl.textContent = balance;
+    reset();
   }, 1000);
+};
+
+const cardcheck = () => {
+  console.log();
 };
