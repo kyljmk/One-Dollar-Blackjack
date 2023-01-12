@@ -67,14 +67,17 @@ const twist = async () => {
 };
 
 const stick = () => {
-  setTimeout(() => {
+  setTimeout(async () => {
     dealerSecond.src = dealersHeldCard.images.png;
     dealerScore += cardConverter(dealersHeldCard.value);
     dealerScoreEl.textContent = dealerScore;
-    dealerDraws();
-  }, 1000);
-
-  dealerScore > 21 && playerWin();
+    if (dealerScore < 16) {
+      dealerDraws();
+    }
+    if (dealerScore < playerScore) {
+      await playerWin();
+    }
+  }, 500);
 };
 
 const dealerDraws = () => {
@@ -88,17 +91,17 @@ const dealerDraws = () => {
     document.getElementById("dealer-container").appendChild(newImage);
     dealerScore += cardConverter(data.cards[0].value);
     dealerScoreEl.textContent = dealerScore;
-  }, 1000);
-  () => {
     if (dealerScore < 16) {
       dealerDraws();
     }
-  };
+  }, 500);
 };
 
 const playerLoss = async () => {
   testTitle.textContent = "Dealer wins";
 };
 const playerWin = async () => {
-  testTitle.textContent = "Player wins";
+  setTimeout(() => {
+    testTitle.textContent = "Player wins";
+  }, 1000);
 };
