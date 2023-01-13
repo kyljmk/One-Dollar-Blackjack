@@ -35,20 +35,18 @@ const startGame = async () => {
 };
 
 const deal = async () => {
-  // if (balance == 1) {
-  //   await startGame();
-  // }
-  // if (balance != 1) {
-  //   let playerElement = document.getElementById("player-container");
-  //   while (playerElement.firstChild) {
-  //     element.removeChild(playerElement.firstChild);
-  //   }
-  //   let dealerElement = document.getElementById("dealer-container");
-  //   while (dealerElement.firstChild) {
-  //     element.removeChild(dealerElement.firstChild);
-  //   }
-  // }
-  await startGame();
+  if (balance == 1) {
+    await startGame();
+  }
+  let playerElement = document.getElementById("player-container");
+  while (playerElement.firstChild) {
+    playerElement.removeChild(playerElement.firstChild);
+  }
+  let dealerElement = document.getElementById("dealer-container");
+  while (dealerElement.firstChild) {
+    dealerElement.removeChild(dealerElement.firstChild);
+  }
+
   const res = await fetch(
     `https://www.deckofcardsapi.com/api/deck/${currentDeckId}/draw/?count=4`
   );
@@ -87,11 +85,11 @@ const twist = async () => {
   playerScore == 21 && stick();
 };
 
-const scoreCheck = async () => {
-  if (dealerScore >= playerScore && dealerScore <= 21) {
-    await playerLoss();
-  } else {
+const scoreCheck = async (dealer, player) => {
+  if (dealer > 21 || player > dealer) {
     await playerWin();
+  } else {
+    await playerLoss();
   }
 };
 
@@ -104,8 +102,9 @@ const stick = () => {
     dealerScoreEl.textContent = dealerScore;
     if (dealerScore < 16) {
       dealerDraws();
+    } else {
+      await scoreCheck(dealerScore, playerScore);
     }
-    await scoreCheck();
   }, 500);
 };
 
@@ -122,6 +121,8 @@ const dealerDraws = () => {
     dealerScoreEl.textContent = dealerScore;
     if (dealerScore < 16) {
       dealerDraws();
+    } else {
+      await scoreCheck(dealerScore, playerScore);
     }
   }, 500);
 };
@@ -131,13 +132,15 @@ const playerLoss = async () => {
     testTitle.textContent = "Dealer wins";
     balance = 1;
     balanceEl.textContent = balance;
-  }, 1000);
+    console.log("Dealer: " + dealerScore + " Player: " + playerScore);
+  }, 1500);
 };
 const playerWin = async () => {
   setTimeout(() => {
     testTitle.textContent = "Player wins";
     balance = balance * 2;
     balanceEl.textContent = balance;
+    console.log("Dealer: " + dealerScore + " Player: " + playerScore);
   }, 1500);
 };
 
