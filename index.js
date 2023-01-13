@@ -1,9 +1,5 @@
 let currentDeckId;
 let dealersHeldCard;
-let dealerFirst = document.getElementById("dealer-first");
-let dealerSecond = document.getElementById("dealer-second");
-let playerFirst = document.getElementById("player-first");
-let playerSecond = document.getElementById("player-second");
 let dealerScoreEl = document.getElementById("dealer-score");
 let playerScoreEl = document.getElementById("player-score");
 let dealerScore;
@@ -27,9 +23,7 @@ const cardConverter = (card) => {
 const reset = () => {
   playerScore = 0;
   dealerScore = 0;
-  document.getElementById("player-container").removeChild("newImage");
-  document.getElementById("dealer-container").removeChild("newImage");
-  window.location.reload();
+  document.getElementById("player-container").removeChild("newPlayerCard");
 };
 
 const startGame = async () => {
@@ -38,18 +32,37 @@ const startGame = async () => {
   );
   const data = await res.json();
   currentDeckId = data.deck_id;
-  await intialDeal();
 };
 
-const intialDeal = async () => {
+const deal = async () => {
+  // if (balance == 1) {
+  //   await startGame();
+  // }
+  // if (balance != 1) {
+  //   let playerElement = document.getElementById("player-container");
+  //   while (playerElement.firstChild) {
+  //     element.removeChild(playerElement.firstChild);
+  //   }
+  //   let dealerElement = document.getElementById("dealer-container");
+  //   while (dealerElement.firstChild) {
+  //     element.removeChild(dealerElement.firstChild);
+  //   }
+  // }
+  await startGame();
   const res = await fetch(
     `https://www.deckofcardsapi.com/api/deck/${currentDeckId}/draw/?count=4`
   );
   const data = await res.json();
+  const dealerFirst = document.createElement("img");
   dealerFirst.src = data.cards[0].images.png;
+  document.getElementById("dealer-container").appendChild(dealerFirst);
   dealersHeldCard = data.cards[1];
+  const playerFirst = document.createElement("img");
   playerFirst.src = data.cards[2].images.png;
+  document.getElementById("player-container").appendChild(playerFirst);
+  const playerSecond = document.createElement("img");
   playerSecond.src = data.cards[3].images.png;
+  document.getElementById("player-container").appendChild(playerSecond);
   dealerScore = cardConverter(data.cards[0].value);
   dealerScoreEl.textContent = dealerScore;
   playerScore =
@@ -58,7 +71,7 @@ const intialDeal = async () => {
   playerScore == 21 && stick();
 };
 
-let playerCardCount = 2;
+let playerCardCount = 0;
 
 const twist = async () => {
   const res = await fetch(
@@ -75,22 +88,24 @@ const twist = async () => {
 };
 
 const scoreCheck = async () => {
-  if (dealerScore < playerScore || dealerScore > 21) {
-    await playerWin();
-  } else {
+  if (dealerScore >= playerScore && dealerScore <= 21) {
     await playerLoss();
+  } else {
+    await playerWin();
   }
 };
 
 const stick = () => {
   setTimeout(async () => {
-    dealerSecond.src = dealersHeldCard.images.png;
+    const dealerHeld = document.createElement("img");
+    dealerHeld.src = dealersHeldCard.images.png;
+    document.getElementById("dealer-container").appendChild(dealerHeld);
     dealerScore += cardConverter(dealersHeldCard.value);
     dealerScoreEl.textContent = dealerScore;
-    scoreCheck();
     if (dealerScore < 16) {
       dealerDraws();
     }
+    await scoreCheck();
   }, 500);
 };
 
@@ -108,25 +123,22 @@ const dealerDraws = () => {
     if (dealerScore < 16) {
       dealerDraws();
     }
-    scoreCheck();
   }, 500);
 };
 
 const playerLoss = async () => {
   setTimeout(() => {
     testTitle.textContent = "Dealer wins";
-    balance = 0;
+    balance = 1;
     balanceEl.textContent = balance;
-    reset();
   }, 1000);
 };
 const playerWin = async () => {
   setTimeout(() => {
     testTitle.textContent = "Player wins";
-    balance *= 2;
+    balance = balance * 2;
     balanceEl.textContent = balance;
-    reset();
-  }, 1000);
+  }, 1500);
 };
 
 const cardcheck = () => {
