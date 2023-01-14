@@ -1,8 +1,25 @@
+body {
+    box-sizing: border-box;
+    background-color: #136207;
+    color: white;
+    padding: 50px;
+    margin: 0;
+}
+
 img {
     height: 150px;
     margin-right: -60px;
 }
 
-.dollar, .balance {
-    display: inline;
+.title {
+    margin-left: 50px;
+}
+
+.balance {
+    display: flex;
+    margin-right: auto;
+}
+
+.dealer, .player {
+    height: 200px;
 }
